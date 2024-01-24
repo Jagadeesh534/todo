@@ -34,7 +34,7 @@ function ListTasks() {
     <div className="d-flex justify-content-center">
       <div className="container w-100 d-flexx">
         {todos.length === 0 && (
-          <h2 className="text-center text-danger ">No Tasks Availale</h2>
+          <h2 className="text-center text-danger ">No Tasks Available</h2>
         )}
         {todos.map((todo) => (
           <div
