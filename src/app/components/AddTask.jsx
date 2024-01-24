@@ -10,7 +10,7 @@ function AddTask() {
     }
   return (
     <div className="d-flex justify-content-center ">
-      <div className="container m-5 w-50 d-flex  d-flex-row ">
+      <div className="container m-5 w-100 d-flex  d-flex-row ">
         <div className="input-group">
           <span className="input-group-text">
             <svg
