@@ -1,6 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { BASE_URL } from "../../constants/todoConstants";
+import { createSlice, nanoid,createAsyncThunk } from "@reduxjs/toolkit";
+import moment from 'moment';
 const initialState= {
     todos: [],
     profile: {},
@@ -8,14 +7,9 @@ const initialState= {
     loading: false
 }
 export const fetchTodos = createAsyncThunk('MY_TODO/fetchTods', async(api,thunkAPI)=>{
-    debugger
-    const currentStateProfile = thunkAPI.getState().profile;
     let data = []
-    await axios.post(BASE_URL+'get-all',{name:currentStateProfile.name,email:currentStateProfile.email}).then((result)=>{
-        if(result) {
-       data =  result.data.data;
-        }
-    }).catch((eroor)=>{console.log(eroor)});
+    data = JSON.parse(localStorage.getItem('tasks') || '[]');
+    
     return data;
 })
 export const todoSlicer = createSlice({
@@ -24,16 +18,21 @@ export const todoSlicer = createSlice({
     reducers : {
         addTask :(state, action) =>{
             const todo =  {
-                id : null,
+                id : nanoid(),
                 task : action.payload,
-                profileId:state.profile.profileId,
-                done: false
+                done: false,
+                isEdit : false,
+                created: moment().format("DD-MM-YYYY hh:mm:ss"),
+                updated: null,
+                doneAt: null
             }
            
             state.todos.push(todo);
+            localStorage.setItem('tasks' ,  JSON.stringify(state.todos));
         },
         removeTask : (state,action)=>{
             state.todos = state.todos.filter((task)=>task.id !=action.payload.id);
+            localStorage.setItem('tasks' , JSON.stringify(state.todos));
         },
         updateTask : (state,action)=>{
             
@@ -41,48 +40,43 @@ export const todoSlicer = createSlice({
                 if(task.id === action.payload.id) {
                    task.task = action.payload.task;
                    task.done = false;
+                   task.updated = moment().format("DD-MM-YYYY hh:mm:ss")
+                   task.doneAt = null
                 }
                 return task;
             });
+            localStorage.setItem('tasks' , JSON.stringify(state.todos));
         },
         doneTheTask : (state,action)=>{
             state.todos = state.todos.map((task)=> {
                 if(task.id === action.payload.id) {
                    task.done = true;
+                   task.doneAt = moment().format("DD-MM-YYYY hh:mm:ss")
                 }
                 return task;
             });
-        },
-        setToken: (state,action) =>{
-            state.accessToken = action.payload
-        },
-        setProfile: (state,action) =>{
-            state.profile = action.payload
+            localStorage.setItem('tasks' , JSON.stringify(state.todos));
         },
         setLoading: (state,action) =>{
             state.loading = action.payload
-        },
-        setTodos: (state,action) =>{
-            state.todos = action.payload;
         }
-    },
-    extraReducers: (builder)=>{
+    } ,extraReducers: (builder)=>{
         builder.addCase(fetchTodos.fulfilled, (state,action)=>{
-            debugger
+            
             state.todos = action.payload
         }),
         builder.addCase(fetchTodos.pending, (state,action)=>{
-            debugger
+            
             state.todos = []
         })
         builder.addCase(fetchTodos.rejected, (state,action)=>{
-            debugger
+            
             state.todos = []
         })
     }
     
 });
 
-export const {addTask,updateTask,removeTask,doneTheTask,setToken,setProfile,setLoading,setTodos} = todoSlicer.actions;
+export const {addTask,updateTask,removeTask,doneTheTask,setLoading,setTodos} = todoSlicer.actions;
 
 export default todoSlicer.reducer;

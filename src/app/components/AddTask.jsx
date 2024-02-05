@@ -1,34 +1,20 @@
 import React, { useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
-import { setLoading,fetchTodos } from "../features/todo/todoSlicer";
-import { BASE_URL } from "../constants/todoConstants";
-import axios from "axios";
+import { addTask, fetchTodos, setLoading } from "../features/todo/todoSlicer";
 import { ClipLoader } from "react-spinners";
 
  function AddTask() {
   const [task, setTask] = useState("");
   const dispatch = useDispatch();
-  const userData = useSelector((state)=>state.profile);
 
   const isLoading  = useSelector((state)=>state.loading);
- 
+  
   const submit = () => {
     dispatch(setLoading(true))
-    const taskObj = {
-      id : null,
-      task: task,
-      done: false,
-      profileId: userData.profileId
-    }
-    axios.post(BASE_URL+'save-task',taskObj).then(async (response)=>{
-      if(response.data.message === 'success') {
-        dispatch(setLoading(false));
-
-    dispatch(fetchTodos())
-      }
-    }).catch((eroor)=>{console.log(eroor)
-      dispatch(setLoading(false))})
+    dispatch(addTask(task))
+    dispatch(setLoading(false))
     setTask("");
+    dispatch(fetchTodos())
   };
  
   return (
@@ -68,7 +54,7 @@ import { ClipLoader } from "react-spinners";
               onChange={(e) => setTask(e.target.value)}
             />
           </div>
-          <button className="btn btn-success m-1" onClick={() => submit()}>
+          <button className="btn btn-success add-button" onClick={() => submit()}>
             Add
           </button>
         </div>
