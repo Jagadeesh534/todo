@@ -7,22 +7,31 @@ import {
   updateTask,
   fetchTodos,
 } from "../features/todo/todoSlicer";
-
+import { MobileDateTimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import moment from 'moment';
 function ListTasks() {
+  dayjs.extend(customParseFormat)
   const todos = useSelector((state) => state.todos);
   const [updatingData, setUpdatingData] = useState({});
+  const [dueDate,setDueDate] = useState(dayjs(moment().format("DD-MM-YYYY hh:mm:ss a"),'DD-MM-YYYY hh:mm:ss a"'));
+  const [currentDate,setCurrentDate] = useState(dayjs(moment().format("DD-MM-YYYY hh:mm:ss a"),'DD-MM-YYYY hh:mm:ss a"'));
+  
   const dispatch = useDispatch();
 
   const onDelete = (todo) => {
     dispatch(setLoading(true));
     dispatch(removeTask(todo));
   };
-
   const onEdit = (todo) => {
+    console.log(todo.dueDate);
     let data = {
       ...todo,
       isEdit: true,
+      dueDate: dayjs(todo.dueDate,'DD-MM-YYYY hh:mm:ss a')
     };
+    console.log(data?.dueDate)
     setUpdatingData(data);
   };
   const onComplete = (todo) => {
@@ -41,12 +50,14 @@ function ListTasks() {
   };
   const saveEditedData = () => {
     dispatch(setLoading(true));
+    const formattedDueDate = dueDate.format('DD-MM-YYYY hh:mm:ss a');
     const taskObj = {
       id: updatingData.id,
       task: updatingData.task,
       done: false,
       created: updatingData.created,
       updated: updatingData.updated,
+      dueDate: formattedDueDate
     };
     dispatch(updateTask(taskObj));
     setUpdatingData({});
@@ -54,6 +65,9 @@ function ListTasks() {
   useEffect(() => {
     dispatch(fetchTodos());
   }, []);
+  const blinkClass = () =>{
+
+  }
   return (
     <div className="d-flex justify-content-center">
       <div className="container w-100 d-flexx">
@@ -74,15 +88,19 @@ function ListTasks() {
           >
             <div className="text-center d-flex justify-content-between align-items-center p-1">
               {updatingData?.isEdit && updatingData.id === todo.id ? (
+                <>
+                 <div className="d-flex flex-column gap-2 w-100 m-1">
                 <input
                   type="text"
-                  className="form-control w-75"
+                  className="form-control"
                   placeholder="Edit Your Task ..."
                   value={updatingData.task}
                   onChange={(e) => {
                     handleUpdatingData(e.target.value);
-                  }}
-                />
+                  } } />
+
+                  <MobileDateTimePicker label='Due Date' value={updatingData.dueDate} onChange={(newTime) => setDueDate(newTime)} />
+                  </div></>
               ) : (
                 <p
                   className={`m-0 text-bolder text-dark ${
@@ -146,24 +164,27 @@ function ListTasks() {
                     </span>
                   </>
                 ) : (
-                  <span onClick={() => saveEditedData()}>
+                  <button className="btn btn-link "  style={{ cursor: "pointer" }} onClick={() => saveEditedData()} >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
                       height="20"
-                      style={{ cursor: "pointer" }}
+                      
                       fill="currentColor"
                       className="bi bi-save"
                       viewBox="0 0 16 16"
                     >
                       <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1z" />
                     </svg>
-                  </span>
+                  </button>
                 )}
               </div>
             </div>
             <div className="text-center d-flex justify-content-between align-items-center p-1">
-              <p className="audit-text"> Created: {todo?.created} {todo?.updated && '| Updated:' + todo?.updated } {todo?.doneAt && '| Done:' + todo?.doneAt } </p>
+              <p className="audit-text"> Created: {todo?.created} {todo?.updated && '| Updated:' + todo?.updated } {todo?.doneAt && '| Done:' + todo?.doneAt } {todo?.dueDate && 
+              <span 
+              className={ `${(dayjs(todo.dueDate,'DD-MM-YYYY hh:mm:ss a')?.isBefore(currentDate) && todo.done === false) ?   'blink-text' : ''}`}> | Due Date: {todo?.dueDate}</span> } 
+              </p>
             </div>
           </div>
         ))}

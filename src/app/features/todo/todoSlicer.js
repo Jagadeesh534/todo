@@ -9,7 +9,6 @@ const initialState= {
 export const fetchTodos = createAsyncThunk('MY_TODO/fetchTods', async(api,thunkAPI)=>{
     let data = []
     data = JSON.parse(localStorage.getItem('tasks') || '[]');
-    
     return data;
 })
 export const todoSlicer = createSlice({
@@ -19,12 +18,13 @@ export const todoSlicer = createSlice({
         addTask :(state, action) =>{
             const todo =  {
                 id : nanoid(),
-                task : action.payload,
+                task : action.payload.task,
                 done: false,
                 isEdit : false,
-                created: moment().format("DD-MM-YYYY hh:mm:ss"),
+                created: moment().format("DD-MM-YYYY hh:mm:ss a"),
                 updated: null,
-                doneAt: null
+                doneAt: null,
+                dueDate: action.payload.dueDate
             }
            
             state.todos.push(todo);
@@ -40,8 +40,9 @@ export const todoSlicer = createSlice({
                 if(task.id === action.payload.id) {
                    task.task = action.payload.task;
                    task.done = false;
-                   task.updated = moment().format("DD-MM-YYYY hh:mm:ss")
-                   task.doneAt = null
+                   task.updated = moment().format("DD-MM-YYYY hh:mm:ss a")
+                   task.doneAt = null,
+                   task.dueDate = action.payload.dueDate
                 }
                 return task;
             });
@@ -51,7 +52,7 @@ export const todoSlicer = createSlice({
             state.todos = state.todos.map((task)=> {
                 if(task.id === action.payload.id) {
                    task.done = true;
-                   task.doneAt = moment().format("DD-MM-YYYY hh:mm:ss")
+                   task.doneAt = moment().format("DD-MM-YYYY hh:mm:ss a")
                 }
                 return task;
             });
@@ -62,15 +63,12 @@ export const todoSlicer = createSlice({
         }
     } ,extraReducers: (builder)=>{
         builder.addCase(fetchTodos.fulfilled, (state,action)=>{
-            
-            state.todos = action.payload
+            state.todos = action.payload;
         }),
         builder.addCase(fetchTodos.pending, (state,action)=>{
-            
             state.todos = []
         })
         builder.addCase(fetchTodos.rejected, (state,action)=>{
-            
             state.todos = []
         })
     }

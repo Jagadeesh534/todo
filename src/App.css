@@ -5,3 +5,21 @@
   font-size: xx-small;
   margin: 0 !important;
 }
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input{
+  padding: .5rem .75rem !important;
+}
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
+  transform: translate(14px, 7px) scale(1) !important;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.blink-text {
+  animation: blink 1s infinite;
+  color: red;
+  font-weight: bold;
+}

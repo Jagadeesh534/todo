@@ -1,22 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { addTask, fetchTodos, setLoading } from "../features/todo/todoSlicer";
-import { ClipLoader } from "react-spinners";
-
+import { MobileDateTimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import moment from 'moment';
+import customParseFormat from 'dayjs/plugin/customParseFormat'
  function AddTask() {
-  const [task, setTask] = useState("");
+  dayjs.extend(customParseFormat)
+  const [task, setTask] = useState('');
   const dispatch = useDispatch();
-
+  const [dueDate,setDueDate] = useState(dayjs(moment().format("DD-MM-YYYY hh:mm:ss a"), 'DD-MM-YYYY hh:mm:ss a'));
+  const [isBtnDisable, setIsBtnDisable] = useState(true)
   const isLoading  = useSelector((state)=>state.loading);
   
   const submit = () => {
+    const formattedDueDate = dueDate.format('DD-MM-YYYY hh:mm:ss a');
     dispatch(setLoading(true))
-    dispatch(addTask(task))
+    const obj = {
+      task: task,
+      dueDate: formattedDueDate
+    }
+    dispatch(addTask(obj))
     dispatch(setLoading(false))
     setTask("");
     dispatch(fetchTodos())
   };
- 
+  
+  useEffect(()=>{
+    if((dueDate!=undefined && dueDate!=null) && (task!='' && task!=undefined) ) {
+      setIsBtnDisable(false);
+     } else {
+       setIsBtnDisable(true);
+     }
+  },[task,dueDate])
   return (
     <>
     
@@ -53,8 +69,13 @@ import { ClipLoader } from "react-spinners";
               value={task}
               onChange={(e) => setTask(e.target.value)}
             />
+           
           </div>
-          <button className="btn btn-success add-button" onClick={() => submit()}>
+          <div className="add-button">
+
+          <MobileDateTimePicker label='Due Date' value={dueDate} onChange={(newTime) => setDueDate(newTime)}/>
+          </div>
+          <button className="btn btn-success add-button" disabled={isBtnDisable} onClick={() => submit()}>
             Add
           </button>
         </div>
