@@ -6,7 +6,7 @@
   margin: 0 !important;
 }
 .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input{
-  padding: .5rem .75rem !important;
+  padding: .45rem .75rem !important;
 }
 .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
   transform: translate(14px, 7px) scale(1) !important;
@@ -128,4 +128,12 @@
 .btn-clr:hover {
   background-color: #db5549 !important;
   border: #db5549 !important;
+}
+
+
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root{
+  color: #6c757d !important;
+}
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+  border-color: #6c757d !important;
 }
