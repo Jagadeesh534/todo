@@ -9,6 +9,7 @@ const initialState= {
 export const fetchTodos = createAsyncThunk('MY_TODO/fetchTods', async(api,thunkAPI)=>{
     let data = []
     data = JSON.parse(localStorage.getItem('tasks') || '[]');
+   data.sort((obj1, obj2) => obj1.priority - obj2.priority);
     return data;
 })
 export const todoSlicer = createSlice({
@@ -24,6 +25,7 @@ export const todoSlicer = createSlice({
                 created: moment().format("DD-MM-YYYY hh:mm:ss a"),
                 updated: null,
                 doneAt: null,
+                priority:action.payload.priority,
                 dueDate: action.payload.dueDate
             }
            
@@ -42,6 +44,7 @@ export const todoSlicer = createSlice({
                    task.done = false;
                    task.updated = moment().format("DD-MM-YYYY hh:mm:ss a")
                    task.doneAt = null,
+                   task.priority = action.payload.priority,
                    task.dueDate = action.payload.dueDate
                 }
                 return task;

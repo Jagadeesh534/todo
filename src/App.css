@@ -23,3 +23,109 @@
   color: red;
   font-weight: bold;
 }
+
+.wrapper{
+  background: #fff;
+  /* width: 100%; */
+  border-radius: 15px;
+  padding: 1rem;
+  box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+  border: 1px solid rgb(0 0 0 / 7%);
+}
+.input-box{
+  padding-top: 1rem;
+  border-bottom: 1px solid #e6e6e6;
+}
+.input-box .task-area{
+  position: relative;
+  min-height: 100px;
+  max-height: 140px;
+  overflow-y: auto;
+}
+.task-area::-webkit-scrollbar{
+  width: 0px;
+}
+.task-area .placeholder{
+  position: absolute;
+  margin-top: -3px;
+  font-size: 22px;
+  color: #98A5B1;
+  pointer-events: none;
+}
+.task-area .input{
+  outline: none;
+  font-size: 17px;
+  min-height: inherit;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+.task-area .editable{
+  position: relative;
+  z-index: 5;
+}
+
+
+.input-box .actions{
+  padding:1rem;
+  cursor: pointer;
+}
+
+.actions i{
+  font-size: 18px;
+}
+.actions span{
+  font-size: 15px;
+  font-weight: 600;
+  margin-left: 7px;
+}
+.bottom{
+  display: flex;
+  margin-top: 13px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+
+.bottom .content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder{
+  background-color: transparent !important;
+}
+.add-btn:hover {
+  color: red !important;
+ 
+}
+
+.cursor-pointer-red{
+  cursor: pointer !important;
+  color: red !important;
+}
+.cursor-pointer-green{
+  cursor: pointer !important;
+  color: green !important;
+}
+.cursor-pointer-blue{
+  cursor: pointer !important;
+  color: blue !important;
+}
+.warapper-in-edit {
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: none !important;
+    border: none !important;
+}
+.list-item-edit {
+  padding: 0 !important;
+}
+.btn-clr {
+  background-color: #dc4c3e !important;
+  border: #dc4c3e !important;
+}
+.btn-clr:hover {
+  background-color: #db5549 !important;
+  border: #db5549 !important;
+}

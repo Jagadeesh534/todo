@@ -65,9 +65,7 @@ function ListTasks() {
   useEffect(() => {
     dispatch(fetchTodos());
   }, []);
-  const blinkClass = () =>{
-
-  }
+  
   return (
     <div className="d-flex justify-content-center">
       <div className="container w-100 d-flexx">
