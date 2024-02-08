@@ -1,6 +1,10 @@
-.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root{
+
+.MuiInputBase-input{
+  padding: .45rem .75rem !important;
+}
+.MuiInputBase-input{
   color: #6c757d !important;
 }
-.css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+.MuiOutlinedInput-notchedOutline{
   border-color: #6c757d !important;
 }

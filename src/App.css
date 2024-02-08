@@ -5,7 +5,7 @@
   font-size: xx-small;
   margin: 0 !important;
 }
-.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input{
+.MuiInputBase-input{
   padding: .45rem .75rem !important;
 }
 .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
@@ -131,9 +131,9 @@
 }
 
 
-.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root{
+.MuiInputBase-input{
   color: #6c757d !important;
 }
-.css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+.MuiOutlinedInput-notchedOutline{
   border-color: #6c757d !important;
 }
