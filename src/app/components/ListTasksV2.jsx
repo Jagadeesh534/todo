@@ -48,7 +48,6 @@ function ListTasksV2() {
     dispatch(fetchTodos());
   }, []);
   const onEdit = (todo) => {
-    console.log(todo.hasOwnProperty('priority'));
     let data = {
       ...todo,
       isEdit: true,
@@ -58,7 +57,6 @@ function ListTasksV2() {
     setUpdatingData(data);
     setTask(data.task);
     const selectedPriority = priorities.find((p) => p.id === data.priority);
-    debugger
     setPriority(data.priority);
     setPriorityLabel(selectedPriority.name);
   };
