@@ -12,7 +12,8 @@ const initialState= {
         completed: true,
         inCompleted: true,
         pending : true
-    }
+    },
+    tasksSize: 0
 }
 export const fetchTodos = createAsyncThunk('MY_TODO/fetchTods', async(api,thunkAPI)=>{
     let data = []
@@ -22,6 +23,7 @@ export const fetchTodos = createAsyncThunk('MY_TODO/fetchTods', async(api,thunkA
     data.sort((obj1, obj2) => obj1.priority - obj2.priority);
     let dataForUI = [];
     let currentState = thunkAPI.getState();
+    thunkAPI.dispatch(setTasksSize(data.length))
     if(currentState.filteredKeys) {
         if(currentState.filteredKeys.completed) {
             dataForUI = [...new Set([...dataForUI, ...data.filter(obj=>obj.done === true)])]
@@ -35,9 +37,8 @@ export const fetchTodos = createAsyncThunk('MY_TODO/fetchTods', async(api,thunkA
             dataForUI = [...new Set([...dataForUI,...pendingData])];
         }
     }
-    dataForUI.sort((a, b) => {
-       
-        return a.done - b.done;
+    dataForUI.sort((a, b) => {  
+    return a.done - b.done;
     });
     return dataForUI;
 })
@@ -105,6 +106,9 @@ export const todoSlicer = createSlice({
                 state.filteredKeys.pending = action.payload.value;
             }
 
+        },
+        setTasksSize:(state,action) =>{
+            state.tasksSize = action.payload;
         }
     } ,extraReducers: (builder)=>{
         builder.addCase(fetchTodos.fulfilled, (state,action)=>{
@@ -120,6 +124,6 @@ export const todoSlicer = createSlice({
     
 });
 
-export const {addTask,updateTask,removeTask,doneTheTask,setLoading,setTodos,statusFilter} = todoSlicer.actions;
+export const {addTask,updateTask,removeTask,doneTheTask,setLoading,setTodos,statusFilter,setTasksSize} = todoSlicer.actions;
 
 export default todoSlicer.reducer;

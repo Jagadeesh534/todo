@@ -28,7 +28,7 @@ function ListTasksV2() {
   const { width, height } = useWindowSize();
   const [showConfetti, setShowConfetti] = useState(false);
   const todos = useSelector((state) => state.todos);
-  // const [todos,setTodos] = useState([]);
+  const tasksSize = useSelector((state) => state.tasksSize);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -150,7 +150,7 @@ function ListTasksV2() {
   };
   return (
     <>
-      {todos?.length != 0 &&  <div className="d-flex justify-content-end">
+      {tasksSize != 0 &&  <div className="d-flex justify-content-end">
         <IconButton
           aria-label="delete"
           aria-describedby={id}
