@@ -150,7 +150,7 @@ function ListTasksV2() {
   };
   return (
     <>
-      <div className="d-flex justify-content-end">
+      {todos?.length != 0 &&  <div className="d-flex justify-content-end">
         <IconButton
           aria-label="delete"
           aria-describedby={id}
@@ -208,7 +208,7 @@ function ListTasksV2() {
           />
           </div>
         </Popover>
-      </div>
+      </div>}
       <div className="d-flex justify-content-start mt-3">
         {showConfetti && <Confetti width={width} height={height} />}
         <ul className="list-group w-100">
