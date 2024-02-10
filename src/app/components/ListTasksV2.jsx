@@ -114,6 +114,7 @@ function ListTasksV2() {
     setTimeout(() => {
       dispatch(removeTask(todo));
     }, 800);
+    dispatch(fetchTodos());
   };
   const onComplete = (todo) => {
     setShowConfetti(true);
