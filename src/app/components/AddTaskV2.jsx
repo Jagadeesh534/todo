@@ -5,7 +5,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import React, { useCallback, useRef, useState } from "react";
 import ContentEditable from "react-contenteditable";
 import { useDispatch } from "react-redux";
-import { addTask } from "../features/todo/todoSlicer";
+import { addTask, fetchTodos } from "../features/todo/todoSlicer";
 
 function AddTaskV2() {
   dayjs.extend(customParseFormat);
@@ -38,6 +38,7 @@ function AddTaskV2() {
       priority: priority,
     };
     dispatch(addTask(obj));
+    dispatch(fetchTodos())
     resetAll();
   };
 

@@ -113,8 +113,9 @@ function ListTasksV2() {
     audio.play();
     setTimeout(() => {
       dispatch(removeTask(todo));
-    }, 800);
+
     dispatch(fetchTodos());
+    }, 800);
   };
   const onComplete = (todo) => {
     setShowConfetti(true);
