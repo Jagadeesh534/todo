@@ -17,9 +17,9 @@ function AddTaskV2() {
   const [priority, setPriority] = useState(1);
   const [showInput, setShowInput] = useState(false);
   const priorities = [
-    { id: 1, name: 'Priority 1' },
-    { id: 2, name: 'Priority 2' },
-    { id: 3, name: 'Priority 3' }
+    { id: 1, name: 'High' },
+    { id: 2, name: 'Medium' },
+    { id: 3, name: 'Low' }
   ];
   const dispatch = useDispatch();
   const onContentChange = useCallback((evt) => {
@@ -57,7 +57,7 @@ function AddTaskV2() {
         <button
           type="button"
           disabled={showInput}
-          onClick={() => setShowInput(true)}
+          onClick={() => {setShowInput(true);setPriorityLabel('High');}}
           className="btn btn-link p-2 add-btn d-flex gap-1 text-decoration-none "
         >
           <span>

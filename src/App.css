@@ -137,3 +137,15 @@
 .MuiOutlinedInput-notchedOutline{
   border-color: #6c757d !important;
 }
+
+.MuiSwitch-track{
+  background-color: #6c757d !important;
+}
+
+.MuiSwitch-thumb {
+  color: #dc4c3e !important; 
+}
+.Mui-checked+.MuiSwitch-track{
+  background-color: #dc4c3e !important;
+
+}
