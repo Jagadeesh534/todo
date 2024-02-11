@@ -21,7 +21,7 @@ import Popover from "@mui/material/Popover";
 import IconButton from "@mui/material/IconButton";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
+import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
 
 function ListTasksV2() {
   dayjs.extend(customParseFormat);
@@ -43,16 +43,16 @@ function ListTasksV2() {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   const priorities = [
-    { id: 1, name: "High" },
-    { id: 2, name: "Medium" },
-    { id: 3, name: "Low" },
+    { id: 1, name: "High", class: "text-danger" },
+    { id: 2, name: "Medium", class: "text-warning" },
+    { id: 3, name: "Low", class: "text-info" },
   ];
   const [task, setTask] = useState("");
   const [dueDate, setDueDate] = useState(
     dayjs(moment().format("DD-MM-YYYY hh:mm:ss a"), "DD-MM-YYYY hh:mm:ss a")
   );
-  const [priorityLabel, setPriorityLabel] = useState("Priority");
-  const [priority, setPriority] = useState("P1");
+  const [priorityLabel, setPriorityLabel] = useState("High");
+  const [priority, setPriority] = useState(1);
   const [updatingData, setUpdatingData] = useState({});
   const [currentDate, setCurrentDate] = useState(
     dayjs(moment().format("DD-MM-YYYY hh:mm:ss a"), 'DD-MM-YYYY hh:mm:ss a"')
@@ -66,7 +66,6 @@ function ListTasksV2() {
   };
   useEffect(() => {
     dispatch(fetchTodos());
-   
   }, []);
   const onEdit = (todo) => {
     let data = {
@@ -101,8 +100,8 @@ function ListTasksV2() {
 
   const resetAll = () => {
     setTask("");
-    setPriority("");
-    setPriorityLabel("Priority");
+    setPriority(1);
+    setPriorityLabel("High");
     setDueDate(
       dayjs(moment().format("DD-MM-YYYY hh:mm:ss a"), "DD-MM-YYYY hh:mm:ss a")
     );
@@ -114,7 +113,7 @@ function ListTasksV2() {
     setTimeout(() => {
       dispatch(removeTask(todo));
 
-    dispatch(fetchTodos());
+      dispatch(fetchTodos());
     }, 800);
   };
   const onComplete = (todo) => {
@@ -130,87 +129,93 @@ function ListTasksV2() {
     setTimeout(() => {
       setShowConfetti(false);
     }, 3000);
-    dispatch(fetchTodos())
+    dispatch(fetchTodos());
   };
   const [completed, setCompleted] = useState(true);
   const [inCompleted, setInCompleted] = useState(true);
   const [pending, setPending] = useState(true);
   const handleInpSwitch = (event) => {
     setInCompleted(event.target.checked);
-    dispatch(statusFilter({key:'inProgress', value:event.target.checked}));
-    dispatch(fetchTodos())
+    dispatch(statusFilter({ key: "inProgress", value: event.target.checked }));
+    dispatch(fetchTodos());
   };
   const handleCmpltedSwitch = (event) => {
     setCompleted(event.target.checked);
-    dispatch(statusFilter({key:'completed', value:event.target.checked}));
-    dispatch(fetchTodos())
+    dispatch(statusFilter({ key: "completed", value: event.target.checked }));
+    dispatch(fetchTodos());
   };
   const handlePendingSwitch = (event) => {
     setPending(event.target.checked);
-    dispatch(statusFilter({key:'pending', value:event.target.checked}));
+    dispatch(statusFilter({ key: "pending", value: event.target.checked }));
     dispatch(fetchTodos());
   };
+  function getPriorityAddOnCls() {
+    const p = priorities.find((obj) => obj.name === priorityLabel);
+    return p.class;
+  }
   return (
     <>
-      {tasksSize != 0 &&  <div className="d-flex justify-content-end">
-        <IconButton
-          aria-label="delete"
-          aria-describedby={id}
-          onClick={handleClick}
-        >
-          <TuneRoundedIcon />
-        </IconButton>
+      {tasksSize != 0 && (
+        <div className="d-flex justify-content-end">
+          <IconButton
+            aria-label="delete"
+            aria-describedby={id}
+            onClick={handleClick}
+          >
+            <TuneRoundedIcon />
+          </IconButton>
 
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-        >
-          <div className="d-flex flex-column m-3 gap-2">
-          <FormControlLabel
-            control={
-              <Switch
-                checked={inCompleted}
-                onChange={(event) => {
-                  handleInpSwitch(event);
-                }}
-                name="inProgress"
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+          >
+            <div className="d-flex flex-column m-3 gap-2">
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={inCompleted}
+                    onChange={(event) => {
+                      handleInpSwitch(event);
+                    }}
+                    name="inProgress"
+                  />
+                }
+                label="In Progress"
               />
-            }
-            label="In Progress"
-          />
-          <FormControlLabel
-            control={
-              <Switch
-                checked={completed}
-                onChange={(event) => {
-                  handleCmpltedSwitch(event);
-                }}
-                name="completed"
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={completed}
+                    onChange={(event) => {
+                      handleCmpltedSwitch(event);
+                    }}
+                    name="completed"
+                  />
+                }
+                label="Completed"
               />
-            }
-            label="Completed"
-          />
-          <FormControlLabel
-            control={
-              <Switch
-                checked={pending}
-                onChange={(event) => {
-                  handlePendingSwitch(event);
-                }}
-                name="pending"
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={pending}
+                    onChange={(event) => {
+                      handlePendingSwitch(event);
+                    }}
+                    name="pending"
+                  />
+                }
+                label="Pending"
               />
-            }
-            label="Pending"
-          />
-          </div>
-        </Popover>
-      </div>}
+            </div>
+          </Popover>
+        </div>
+      )}
       <div className="d-flex justify-content-start mt-3">
         {showConfetti && <Confetti width={width} height={height} />}
         <ul className="list-group w-100">
@@ -259,6 +264,18 @@ function ListTasksV2() {
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                               >
+                                <span className="m-1">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  fill="currentColor"
+                                  className={`bi bi-flag-fill ${getPriorityAddOnCls()}`}
+                                  viewBox="0 0 16 16"
+                                >
+                                  <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                                </svg>
+                              </span> 
                                 {priorityLabel}
                               </a>
 
@@ -272,6 +289,18 @@ function ListTasksV2() {
                                           handlePriorityLabel(p);
                                         }}
                                       >
+                                        <span className="m-1">
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="18"
+                                            height="18"
+                                            fill="currentColor"
+                                            className={`bi bi-flag-fill  ${p.class}`}
+                                            viewBox="0 0 16 16"
+                                          >
+                                            <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                                          </svg>
+                                        </span>
                                         {p.name}
                                       </a>
                                     </li>
